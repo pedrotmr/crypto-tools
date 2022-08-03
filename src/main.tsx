@@ -1,7 +1,7 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
 import "./styles/global.css";
-import Router from "./routes";
+import Router from "./routes/routes";
 import { TokenProvider } from "./context/TokenContext";
 import { WalletProvider } from "./context/WalletContext";
 

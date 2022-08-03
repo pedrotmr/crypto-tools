@@ -1,16 +1,28 @@
 import React, { useState, useEffect } from "react";
-import { BsFillMoonFill, BsFillSunFill, BsFillHouseDoorFill } from "react-icons/bs";
-import { IoMdWallet } from "react-icons/io";
-import { FaArrowLeft } from "react-icons/fa";
 import { useLocation, useNavigate } from "react-router-dom";
 import { Link } from "react-router-dom";
+import {
+  IoIosSend,
+  IoIosSwap,
+  IoMdWallet,
+  IoMdTrendingUp,
+  IoIosSunny,
+  IoIosMoon,
+  IoMdArrowBack,
+} from "react-icons/io";
 
 type NavBarProps = {
   isDarkMode: boolean;
   toggleDarkMode: () => void;
 };
 
-type NavItem = "Home" | "Wallet";
+type NavBarItemsType = {
+  path: string;
+  name: "Trending" | "Wallet" | "Send" | "Swap";
+  icon: React.ReactNode;
+};
+
+type NavItem = "Trending" | "Wallet" | "Send" | "Swap";
 
 const sharedStyles = {
   toggleButton: "text-xl px-8",
@@ -19,11 +31,34 @@ const sharedStyles = {
 };
 
 const NavBar: React.FC<NavBarProps> = ({ isDarkMode, toggleDarkMode }) => {
-  const [selected, setSelected] = useState<NavItem>("Home");
+  const [selected, setSelected] = useState<NavItem>("Trending");
   const [isOnChartScreen, setIsOnChartScreen] = useState(false);
 
   const location = useLocation();
   const navigate = useNavigate();
+
+  const navBarItems: NavBarItemsType[] = [
+    {
+      path: "/",
+      name: "Trending",
+      icon: <IoMdTrendingUp />,
+    },
+    {
+      path: "wallet",
+      name: "Wallet",
+      icon: <IoMdWallet />,
+    },
+    {
+      path: "send",
+      name: "Send",
+      icon: <IoIosSend />,
+    },
+    {
+      path: "swap",
+      name: "Swap",
+      icon: <IoIosSwap />,
+    },
+  ];
 
   useEffect(() => {
     if (location.pathname.startsWith("/coins")) {
@@ -41,28 +76,23 @@ const NavBar: React.FC<NavBarProps> = ({ isDarkMode, toggleDarkMode }) => {
     <div className='flex justify-between items-center'>
       {isOnChartScreen ? (
         <button className={`${sharedStyles.navItem}`} onClick={() => navigate(-1)}>
-          <FaArrowLeft /> <span>Back</span>
+          <IoMdArrowBack /> <span>Back</span>
         </button>
       ) : (
         <>
-          <span className={`${sharedStyles.toggleButton} hidden md:flex`}></span>
+          <span className={`${sharedStyles.toggleButton} hidden lg:flex`}></span>
           <nav className='flex justify-center gap-4 ml-6'>
-            <Link
-              to='/'
-              className={`${sharedStyles.navItem} ${
-                selected === "Home" && sharedStyles.activeNavItem
-              }`}
-              onClick={() => setSelected("Home")}>
-              <BsFillHouseDoorFill /> <span>Home</span>
-            </Link>
-            <Link
-              to='wallet'
-              className={`${sharedStyles.navItem} ${
-                selected === "Wallet" && sharedStyles.activeNavItem
-              }`}
-              onClick={() => setSelected("Wallet")}>
-              <IoMdWallet /> <span>Wallet</span>
-            </Link>
+            {navBarItems.map((item, idx) => (
+              <Link
+                to={item.path}
+                key={idx}
+                className={`${sharedStyles.navItem} ${
+                  selected === item.name && sharedStyles.activeNavItem
+                }`}
+                onClick={() => setSelected(item.name)}>
+                {item.icon} <span className='hidden md:flex'>{item.name}</span>
+              </Link>
+            ))}
           </nav>
         </>
       )}
@@ -71,7 +101,7 @@ const NavBar: React.FC<NavBarProps> = ({ isDarkMode, toggleDarkMode }) => {
         aria-label='toggle dark mode'
         className={sharedStyles.toggleButton}
         onClick={toggleDarkMode}>
-        {isDarkMode ? <BsFillSunFill /> : <BsFillMoonFill />}
+        {isDarkMode ? <IoIosSunny /> : <IoIosMoon />}
       </button>
     </div>
   );

@@ -4,7 +4,7 @@ import TokenTable from "../components/TokenTable";
 import FooterButtons from "../components/FooterButton";
 import { useGetTokenDetails } from "../hooks/useGetTokenDetails";
 
-const Home: React.FC = () => {
+const Trending: React.FC = () => {
   const navigate = useNavigate();
   const location = useLocation();
 
@@ -20,4 +20,4 @@ const Home: React.FC = () => {
   );
 };
 
-export default Home;
+export default Trending;
