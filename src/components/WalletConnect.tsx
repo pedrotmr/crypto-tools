@@ -1,4 +1,5 @@
 import React from "react";
+import MetamaskLogo from "../assets/metamask-icon";
 import { useWalletContext } from "../context/WalletContext";
 
 const WalletConnect: React.FC = () => {
@@ -6,7 +7,7 @@ const WalletConnect: React.FC = () => {
 
   return (
     <div className='flex flex-col justify-center items-center mt-12'>
-      <img src='./assets/metamask.svg' alt='metamask logo' width={180} height={180} />
+      <MetamaskLogo width={180} height={180} />
       <h2 className='text-5xl tracking-widest '>METAMASK</h2>
       <button
         onClick={() => connectWallet()}

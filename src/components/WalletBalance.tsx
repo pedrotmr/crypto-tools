@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import useSWR from "swr";
 import { getAddressInfo } from "../api/getAddressInfo";
+import MetamaskLogo from "../assets/metamask-icon";
 import { useWalletContext } from "../context/WalletContext";
 
 const sharedStyles = {
@@ -52,7 +53,7 @@ const WalletBalance: React.FC = () => {
       </div>
       <div className='flex p-2 mt-4 justify-between '>
         <span className='flex gap-2 text-sm items-center text-gray-500 dark:text-gray-400'>
-          <img src='./assets/metamask.svg' alt='metamask logo' width={25} height={25} />
+          <MetamaskLogo width={25} height={25} />
           {`${account.slice(0, 6)}...${account.slice(-8)}`}
         </span>
         <button onClick={() => handleCopy(account)} className='relative inline-block group'>
