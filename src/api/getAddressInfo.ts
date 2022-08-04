@@ -11,11 +11,12 @@ export const getAddressInfo = async (address: string): Promise<WalletBalance[]> 
   const ETHDetails = await fetchTokenDetailsByCoinGecko("ethereum");
   const ETHBalance = [
     {
-      name: "Ethereum",
+      name: "Ether",
       symbol: "ETH",
       image: "https://i.ibb.co/41jz9cZ/eth.png",
-      balance: data["ETH"].balance.toFixed(2),
-      value: formatNumber(data["ETH"].balance * ETHDetails.market_data.current_price.usd),
+      balance: data["ETH"].balance.toFixed(6),
+      value: data["ETH"].balance * ETHDetails.market_data.current_price.usd,
+      displayValue: formatNumber(data["ETH"].balance * ETHDetails.market_data.current_price.usd),
     },
   ];
 
@@ -29,7 +30,10 @@ export const getAddressInfo = async (address: string): Promise<WalletBalance[]> 
           symbol: token.tokenInfo.symbol,
           image: tokenDetails.image.large,
           balance: setBalanceWithDecimals(token.balance, Number(token.tokenInfo.decimals)),
-          value: formatNumber(
+          value:
+            Number(setBalanceWithDecimals(token.balance, Number(token.tokenInfo.decimals))) *
+            token.tokenInfo.price.rate,
+          displayValue: formatNumber(
             Number(setBalanceWithDecimals(token.balance, Number(token.tokenInfo.decimals))) *
               token.tokenInfo.price.rate
           ),

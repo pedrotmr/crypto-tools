@@ -1,4 +1,3 @@
-import * as React from "react";
 import { SVGProps } from "react";
 
 const MetamaskLogo = (props: SVGProps<SVGSVGElement>) => (
@@ -7,7 +6,8 @@ const MetamaskLogo = (props: SVGProps<SVGSVGElement>) => (
     xmlns='http://www.w3.org/2000/svg'
     x={0}
     y={0}
-    viewBox='0 0 318.6 318.6'    xmlSpace='preserve'
+    viewBox='0 0 318.6 318.6'
+    xmlSpace='preserve'
     {...props}>
     <style>
       {

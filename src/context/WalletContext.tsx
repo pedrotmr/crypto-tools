@@ -9,8 +9,8 @@ type WalletContextType = {
   ENGBalance: Balance | null;
   tokenBalances: WalletBalance[] | null;
   connectWallet: () => Promise<void>;
-  switchToEnergiNetwork: () => Promise<void>;
-  isOnTheEnergiNetwork: () => boolean;
+  switchToMainnet: () => Promise<void>;
+  isConnectedToMainnet: () => boolean;
 };
 
 type Balance = {
@@ -30,17 +30,10 @@ export const WalletProvider: React.FC<React.PropsWithChildren> = ({ children }) 
   const [ENGBalance, setENGBalance] = useState<Balance | null>(null);
   const [tokenBalances, setTokenBalances] = useState<WalletBalance[] | null>(null);
 
-  const energiChainId = 39797;
-
   useEffect(() => {
     checkIfWalletIsConneceted();
     getNetwork();
   }, []);
-
-  // useEffect(() => {
-  //   account && getEnergiTokenBalance(account);
-  //   account && fetchAddressInfoByEthplorer(account).then((res) => setTokenBalances(res));
-  // }, [account]);
 
   useEffect(() => {
     if (window.ethereum) {
@@ -57,8 +50,7 @@ export const WalletProvider: React.FC<React.PropsWithChildren> = ({ children }) 
     try {
       const accounts = await window.ethereum.request({ method: "eth_requestAccounts" });
       setAccount(accounts[0]);
-      if (network === energiChainId) return;
-      switchToEnergiNetwork();
+      switchToMainnet();
     } catch (error) {
       alert("Please install the Metamask extension");
     }
@@ -71,28 +63,12 @@ export const WalletProvider: React.FC<React.PropsWithChildren> = ({ children }) 
     setAccount(accounts[0]);
   };
 
-  const switchToEnergiNetwork = async () => {
-    const hexEnergiChainId = `0x${energiChainId.toString(16)}`;
-    try {
-      await window.ethereum.request({
-        method: "wallet_switchEthereumChain",
-        params: [{ chainId: hexEnergiChainId }],
-      });
-    } catch (error) {
-      try {
-        await window.ethereum.request({
-          method: "wallet_addEthereumChain",
-          params: [
-            {
-              chainId: hexEnergiChainId,
-              rpcUrl: "https://nodeapi.energi.network",
-            },
-          ],
-        });
-      } catch (error) {
-        console.log("Please install the error");
-      }
-    }
+  const switchToMainnet = async (): Promise<void> => {
+    const mainnetChain = "0x1";
+    await window.ethereum.request({
+      method: "wallet_switchEthereumChain",
+      params: [{ chainId: mainnetChain }],
+    });
   };
 
   const getNetwork = async (): Promise<void> => {
@@ -101,8 +77,8 @@ export const WalletProvider: React.FC<React.PropsWithChildren> = ({ children }) 
     setNetwork(network.chainId);
   };
 
-  const isOnTheEnergiNetwork = (): boolean => {
-    return network === energiChainId;
+  const isConnectedToMainnet = (): boolean => {
+    return network === 1;
   };
 
   // const getEnergiTokenBalance = async (account: string): Promise<void> => {
@@ -141,8 +117,8 @@ export const WalletProvider: React.FC<React.PropsWithChildren> = ({ children }) 
         ENGBalance,
         tokenBalances,
         connectWallet,
-        isOnTheEnergiNetwork,
-        switchToEnergiNetwork,
+        isConnectedToMainnet,
+        switchToMainnet,
       }}>
       {children}
     </WalletContext.Provider>

@@ -23,5 +23,5 @@ export const formatDate = (timestamp: number): string => {
 };
 
 export const setBalanceWithDecimals = (rawBalance: number, decimals: number) => {
-  return (Number(rawBalance) / Math.pow(10, decimals)).toFixed(2);
+  return (Number(rawBalance) / Math.pow(10, decimals)).toFixed(6);
 };

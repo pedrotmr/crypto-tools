@@ -3,5 +3,6 @@ export type WalletBalance = {
   symbol: string;
   image: string;
   balance: string;
-  value: string;
+  value: number;
+  displayValue: string;
 };

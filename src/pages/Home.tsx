@@ -28,8 +28,9 @@ const Home: React.FC = () => {
       <div className='flex justify-center items-center mt-6'>
         <button
           className='py-2 px-4 text-sm rounded-lg text-gray-500 bg-white inline-flex items-center border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white'
-          onClick={() => setSize(size + 1)}>
-          {isLoading ? "loading" : <span>Load more ...</span>}
+          onClick={() => setSize(size + 1)}
+          disabled={isLoading}>
+          {isLoading ? <span>Loading ...</span> : <span>Load more ...</span>}
         </button>
       </div>
     </div>

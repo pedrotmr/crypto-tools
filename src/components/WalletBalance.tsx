@@ -1,8 +1,10 @@
 import React, { useState } from "react";
 import useSWR from "swr";
 import { getAddressInfo } from "../api/getAddressInfo";
-import MetamaskLogo from "../assets/metamask-icon";
+import EthereumLogo from "../assets/svg/ethereum";
+import MetamaskLogo from "../assets/svg/metamask";
 import { useWalletContext } from "../context/WalletContext";
+import { formatNumber } from "../utils";
 
 const sharedStyles = {
   headItem: "py-3 px-6",
@@ -10,7 +12,7 @@ const sharedStyles = {
 };
 
 const WalletBalance: React.FC = () => {
-  const { account, isOnTheEnergiNetwork, switchToEnergiNetwork, ENGBalance, tokenBalances } =
+  const { account, isConnectedToMainnet, switchToMainnet, ENGBalance, tokenBalances } =
     useWalletContext();
 
   const [tooltipText, setTooltipText] = useState("Copy to clipboard");
@@ -18,6 +20,8 @@ const WalletBalance: React.FC = () => {
   if (!account) return null;
 
   const { data } = useSWR(account, getAddressInfo);
+
+  const totalBalance = data && data.reduce((acc, curr) => acc + curr.value, 0);
 
   const handleCopy = (account: string) => {
     navigator.clipboard.writeText(account);
@@ -31,21 +35,16 @@ const WalletBalance: React.FC = () => {
     <div className='p-4 mt-10 rounded-lg w-full md:w-3/4 mx-auto flex flex-col bg-slate-200 dark:bg-gray-800'>
       <div className='flex p-2 dark:border-gray-700 border-b justify-between'>
         <div className='flex items-center gap-3'>
-          <img
-            src='https://app.energiswap.exchange/favicon.png'
-            className='grayscale'
-            width={18}
-            height={18}
-          />
-          Energi Network
+          <EthereumLogo className='grayscale' width={18} height={18} />
+          <span>Ethereum Network</span>
         </div>
         <div className='flex text-sm'>
-          {isOnTheEnergiNetwork() ? (
+          {isConnectedToMainnet() ? (
             <p className='text-green-600'>● Connected</p>
           ) : (
             <button
               className='text-white bg-red-500 dark:bg-red-600 dark:hover:bg-red-500 rounded-lg px-3 py-1'
-              onClick={() => switchToEnergiNetwork()}>
+              onClick={() => switchToMainnet()}>
               ⊗ Wrong network
             </button>
           )}
@@ -60,7 +59,7 @@ const WalletBalance: React.FC = () => {
           <span className='bg-gray-300 dark:bg-gray-700 flex justify-center items-center rounded-full w-6 h-6'>
             ❏
           </span>
-          <span className='invisible group-hover:visible text-black absolute w-max bg-gray-300 py-1 px-3 text-sm z-10 top-full left-1/2 -ml-12 rounded-lg'>
+          <span className='hidden group-hover:flex text-black absolute w-max bg-gray-300 py-1 px-3 text-sm z-10 top-full right-1 -ml-12 rounded-lg'>
             {tooltipText}
           </span>
         </button>
@@ -68,24 +67,17 @@ const WalletBalance: React.FC = () => {
 
       <div className='flex flex-col justify-center items-center mt-8 mb-8'>
         <div className='flex text-lg'>Total Balance</div>
-        <div className='flex items-center justify-between gap-8 mt-5'>
-          <span className='flex gap-3'>
-            <img src='https://app.energiswap.exchange/favicon.png' width={25} height={35} />
-            {ENGBalance?.balance}
-          </span>
-          {ENGBalance?.value}
-        </div>
+        <strong className='mt-2'>{totalBalance && formatNumber(totalBalance)}</strong>
       </div>
 
       {!data && <div>Loading...</div>}
 
       {data && data.length > 0 && (
-        <div className='rounded-xl w-full md:w-3/4  mx-auto overflow-x-auto mt-4 mb-8'>
+        <div className='rounded-xl w-full md:w-3/4 mx-auto overflow-x-auto mt-4 mb-8'>
           <table className='w-full px-4 text-sm text-left text-gray-500 dark:text-gray-200'>
             <thead className='text-xs text-gray-700 dark:text-gray-50 bg-slate-300 dark:bg-gray-700'>
               <tr>
                 <th className='py-3 px-6'>Coin</th>
-                <th className='py-3 px-6'>Symbol</th>
                 <th className='py-3 px-6'>Balance</th>
                 <th className='py-3 px-6'>Value</th>
               </tr>
@@ -100,9 +92,8 @@ const WalletBalance: React.FC = () => {
                       <span>{token.name}</span>
                     </span>
                   </td>
-                  <td className={sharedStyles.bodyItem}>{token.symbol}</td>
                   <td className={sharedStyles.bodyItem}>{token.balance}</td>
-                  <td className={sharedStyles.bodyItem}>{token.value}</td>
+                  <td className={sharedStyles.bodyItem}>{token.displayValue}</td>
                 </tr>
               ))}
             </tbody>
