@@ -1,11 +1,11 @@
 import React from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-import Wallet from "../pages/Wallet";
-import Trending from "../pages/Trending";
-import CoinChart from "../pages/CoinChart";
-import App from "../App";
-import Send from "../pages/Send";
-import Swap from "../pages/Swap";
+import Wallet from "./pages/Wallet";
+import Trending from "./pages/Home";
+import CoinChart from "./pages/CoinChart";
+import App from "./App";
+import Send from "./pages/Send";
+import Swap from "./pages/Swap";
 
 const Router: React.FC = ({}) => {
   return (

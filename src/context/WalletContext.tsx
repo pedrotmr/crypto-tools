@@ -2,7 +2,7 @@ import React, { useState, useContext, useEffect } from "react";
 import { ethers } from "ethers";
 import { fetchAddressInfoByEthplorer, fetchTokenDetailsByCoinGecko } from "../api/apiService";
 import { formatNumber, setBalanceWithDecimals } from "../utils";
-import { WalletBalance } from "../types/walletBalance";
+import { WalletBalance } from "../types/wallet-balance";
 
 type WalletContextType = {
   account: string | null;

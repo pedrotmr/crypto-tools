@@ -1,7 +1,7 @@
 import React, { useState, useContext } from "react";
 import { getChartFormattedData, getFormattedTableData } from "../api/apiService";
-import { ChartData } from "../types/chartData";
-import { TrendingTokens } from "../types/trendingTokens";
+import { ChartData } from "../types/chart-data";
+import { TrendingTokens } from "../types/trending-tokens";
 
 type fetchPropType = {
   page: number;

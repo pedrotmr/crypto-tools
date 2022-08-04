@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState } from "react";
 import { createChart } from "lightweight-charts";
 import { useOutletContext } from "react-router-dom";
 import { useParams } from "react-router-dom";
-import { ChartData } from "../types/chartData";
+import { ChartData } from "../types/chart-data";
 import { useTokenContext } from "../context/TokenContext";
 
 const CoinChart: React.FC = () => {
@@ -15,7 +15,9 @@ const CoinChart: React.FC = () => {
 
   useEffect(() => {
     if (params.id) {
-      getChartData(params.id);
+      // getChartData(params.id);
+      // getChartData(params.id);
+      console.log(params.id);
     }
   }, [params]);
 

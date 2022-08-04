@@ -1,4 +1,4 @@
-export type CoinMetadata = {
+export type TokenData = {
   id: string;
   symbol: string;
   name: string;

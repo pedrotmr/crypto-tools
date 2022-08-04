@@ -1,5 +1,5 @@
 import React, { useMemo, useState } from "react";
-import { TrendingTokens } from "../types/trendingTokens";
+import { TrendingTokens } from "../types/trending-tokens";
 
 type SortConfig = {
   column: keyof TrendingTokens;

@@ -1,8 +1,7 @@
-import React, { ReactNode, useEffect } from "react";
+import React from "react";
 import { useSort } from "../hooks/useSort";
 import { Link } from "react-router-dom";
-import { useTokenContext } from "../context/TokenContext";
-import { TrendingTokens } from "../types/trendingTokens";
+import { TrendingTokens } from "../types/trending-tokens";
 import { Sparklines, SparklinesLine, SparklinesNormalBand } from "react-sparklines";
 
 type TableHeader = {
@@ -10,14 +9,16 @@ type TableHeader = {
   name: string;
 };
 
+type TokenTableProps = {
+  trendingTokens: TrendingTokens[];
+};
+
 const sharedStyles = {
   headItem: "py-3 px-6 flex items-center gap-2",
   bodyItem: "py-4 px-6",
 };
 
-const TokenTable: React.FC = () => {
-  const { getTokenPage, pagination, trendingTokens } = useTokenContext();
-
+const TokenTable: React.FC<TokenTableProps> = ({ trendingTokens }) => {
   const { sortedItems, sortIt, getClassForSortedColumn } = useSort(trendingTokens);
 
   const tableHeader: TableHeader[] = [
@@ -25,13 +26,11 @@ const TokenTable: React.FC = () => {
     { dataId: "name", name: "Coin" },
     { dataId: "symbol", name: "" },
     { dataId: "price", name: "Price" },
+    { dataId: "priceChange24h", name: "24h" },
+    { dataId: "priceChange7d", name: "7d" },
     { dataId: "volume24h", name: "24h Volume" },
     { dataId: "mktCap", name: "Mkt Cap" },
   ];
-
-  useEffect(() => {
-    getTokenPage(pagination.perPage);
-  }, []);
 
   return (
     <div className='overflow-x-auto rounded-xl '>
@@ -61,16 +60,28 @@ const TokenTable: React.FC = () => {
                 <td className={sharedStyles.bodyItem}>{token.id}</td>
                 <td className={sharedStyles.bodyItem}>
                   <span className='flex items-center gap-2'>
-                    <img src={token.logo} alt={`${token.name}-logo`} width={25} height={25} />
+                    <img src={token.image} alt={`${token.name}-logo`} width={25} height={25} />
                     <span>{token.name}</span>
                   </span>
                 </td>
                 <td className={sharedStyles.bodyItem}>{token.symbol}</td>
                 <td className={sharedStyles.bodyItem}>{token.displayPrice}</td>
+                <td
+                  className={`${sharedStyles.bodyItem} font-semibold ${
+                    token.priceChange24h > 0 ? "text-[#57bd0d]" : "text-[#ed5565]"
+                  }`}>
+                  {token.displayPriceChange24h}
+                </td>
+                <td
+                  className={`${sharedStyles.bodyItem} font-semibold ${
+                    token.priceChange7d > 0 ? "text-[#57bd0d]" : "text-[#ed5565]"
+                  }`}>
+                  {token.displayPriceChange7d}
+                </td>
                 <td className={sharedStyles.bodyItem}>{token.displayVolume24h}</td>
                 <td className={sharedStyles.bodyItem}>{token.displayMktCap}</td>
                 <td className={sharedStyles.headItem}>
-                  <Link to={`/coins/${token.idx}`}>{renderSparkline(token.sparkline)}</Link>
+                  <Link to={token.route}>{renderSparkline(token.sparkline)}</Link>
                 </td>
               </tr>
             ))}
@@ -80,9 +91,9 @@ const TokenTable: React.FC = () => {
   );
 };
 
-const renderSparkline = (data: number[]): ReactNode => {
+const renderSparkline = (data: number[]): React.ReactNode => {
   return (
-    <div className="w-24 md:w-40 h-4 md:h-8">
+    <div className='w-24 md:w-40 h-4 md:h-8'>
       <Sparklines data={data}>
         <SparklinesLine
           style={{ fill: "none", strokeWidth: 3 }}
@@ -93,4 +104,4 @@ const renderSparkline = (data: number[]): ReactNode => {
   );
 };
 
-export default TokenTable;
+export default React.memo(TokenTable);

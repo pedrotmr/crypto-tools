@@ -1,4 +1,4 @@
-export type CoinMarketDetails = {
+export type TokenMarketData = {
   id: ID;
   symbol: string;
   name: string;

@@ -1,10 +1,10 @@
-import { CoinMarketDetails } from "../types/coingecko/CoinMarketDetails";
-import { CoinMetadata } from "../types/coingecko/CoinMetadata";
-import { TrendingTokens } from "../types/trendingTokens";
+import { CoinMarketDetails } from "../types/coingecko/token-market-data";
+import { CoinMetadata } from "../types/coingecko/token-data";
+import { TrendingTokens } from "../types/trending-tokens";
 import { formatDate, formatNumber, setBalanceWithDecimals, _fetch } from "../utils";
-import { ChartData } from "../types/chartData";
+import { ChartData } from "../types/chart-data";
 import { EthplorerAddressResponse } from "../types/ethplorerReponse";
-import { WalletBalance } from "../types/walletBalance";
+import { WalletBalance } from "../types/wallet-balance";
 
 export type fetchPropType = {
   page: number;
