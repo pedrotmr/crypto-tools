@@ -1,14 +1,3 @@
-export const _fetch = async (url: string): Promise<any> => {
-  try {
-    const response = await fetch(url);
-    const data = await response.json();
-    return data;
-  } catch (error) {
-    console.error(error);
-    return null;
-  }
-};
-
 export const formatNumber = (
   number: number,
   decimalHandler: { decimal: boolean } = { decimal: true }

@@ -1,4 +1,6 @@
 import React, { useState } from "react";
+import useSWR from "swr";
+import { getAddressInfo } from "../api/getAddressInfo";
 import { useWalletContext } from "../context/WalletContext";
 
 const sharedStyles = {
@@ -9,9 +11,12 @@ const sharedStyles = {
 const WalletBalance: React.FC = () => {
   const { account, isOnTheEnergiNetwork, switchToEnergiNetwork, ENGBalance, tokenBalances } =
     useWalletContext();
+
   const [tooltipText, setTooltipText] = useState("Copy to clipboard");
 
   if (!account) return null;
+
+  const { data } = useSWR(account, getAddressInfo);
 
   const handleCopy = (account: string) => {
     navigator.clipboard.writeText(account);
@@ -71,7 +76,9 @@ const WalletBalance: React.FC = () => {
         </div>
       </div>
 
-      {tokenBalances && tokenBalances.length > 0 && (
+      {!data && <div>Loading...</div>}
+
+      {data && data.length > 0 && (
         <div className='rounded-xl w-full md:w-3/4  mx-auto overflow-x-auto mt-4 mb-8'>
           <table className='w-full px-4 text-sm text-left text-gray-500 dark:text-gray-200'>
             <thead className='text-xs text-gray-700 dark:text-gray-50 bg-slate-300 dark:bg-gray-700'>
@@ -84,7 +91,7 @@ const WalletBalance: React.FC = () => {
             </thead>
 
             <tbody className='bg-slate-100 dark:text-gray-400 dark:bg-gray-900 dark:border-gray-700'>
-              {tokenBalances.map((token, index) => (
+              {data.map((token, index) => (
                 <tr key={index}>
                   <td className={sharedStyles.bodyItem}>
                     <span className='flex items-center gap-2'>

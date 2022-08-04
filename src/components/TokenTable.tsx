@@ -15,7 +15,7 @@ type TokenTableProps = {
 
 const sharedStyles = {
   headItem: "py-3 px-6 flex items-center gap-2",
-  bodyItem: "py-4 px-6",
+  bodyItem: "h-[calc(70vh/10)] px-6 ",
 };
 
 const TokenTable: React.FC<TokenTableProps> = ({ trendingTokens }) => {
@@ -33,17 +33,15 @@ const TokenTable: React.FC<TokenTableProps> = ({ trendingTokens }) => {
   ];
 
   return (
-    <div className='overflow-x-auto rounded-xl '>
-      <table className='w-full text-sm text-left text-gray-500 h-[75vh] dark:text-gray-200'>
+    <div className='overflow-x-auto rounded-xl'>
+      <table className='w-full text-sm text-left text-gray-500 h-[70px] dark:text-gray-200'>
         <thead className='text-xs text-gray-700 dark:text-gray-50 bg-slate-200 dark:bg-gray-700'>
           <tr>
             {tableHeader.map((header, idx) => (
               <th key={idx}>
                 <button
                   aria-label={`sort by ${header.dataId}`}
-                  className={`py-3 px-6 flex items-center gap-2 ${getClassForSortedColumn(
-                    header.dataId
-                  )} `}
+                  className={`${sharedStyles.headItem} ${getClassForSortedColumn(header.dataId)} `}
                   onClick={() => sortIt(header.dataId)}>
                   {header.name}
                 </button>
@@ -80,7 +78,7 @@ const TokenTable: React.FC<TokenTableProps> = ({ trendingTokens }) => {
                 </td>
                 <td className={sharedStyles.bodyItem}>{token.displayVolume24h}</td>
                 <td className={sharedStyles.bodyItem}>{token.displayMktCap}</td>
-                <td className={sharedStyles.headItem}>
+                <td className={sharedStyles.bodyItem}>
                   <Link to={token.route}>{renderSparkline(token.sparkline)}</Link>
                 </td>
               </tr>
@@ -93,7 +91,7 @@ const TokenTable: React.FC<TokenTableProps> = ({ trendingTokens }) => {
 
 const renderSparkline = (data: number[]): React.ReactNode => {
   return (
-    <div className='w-24 md:w-40 h-4 md:h-8'>
+    <div className='w-24 md:w-40'>
       <Sparklines data={data}>
         <SparklinesLine
           style={{ fill: "none", strokeWidth: 3 }}

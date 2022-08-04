@@ -1,6 +1,5 @@
 import React, { useState, useContext, useEffect } from "react";
 import { ethers } from "ethers";
-import { fetchAddressInfoByEthplorer, fetchTokenDetailsByCoinGecko } from "../api/apiService";
 import { formatNumber, setBalanceWithDecimals } from "../utils";
 import { WalletBalance } from "../types/wallet-balance";
 
@@ -38,10 +37,10 @@ export const WalletProvider: React.FC<React.PropsWithChildren> = ({ children }) 
     getNetwork();
   }, []);
 
-  useEffect(() => {
-    account && getEnergiTokenBalance(account);
-    account && fetchAddressInfoByEthplorer(account).then((res) => setTokenBalances(res));
-  }, [account]);
+  // useEffect(() => {
+  //   account && getEnergiTokenBalance(account);
+  //   account && fetchAddressInfoByEthplorer(account).then((res) => setTokenBalances(res));
+  // }, [account]);
 
   useEffect(() => {
     if (window.ethereum) {
@@ -106,33 +105,33 @@ export const WalletProvider: React.FC<React.PropsWithChildren> = ({ children }) 
     return network === energiChainId;
   };
 
-  const getEnergiTokenBalance = async (account: string): Promise<void> => {
-    if (!account) return;
-    const ENGTokenAddress = "0x62EE90d75f1BEc074A32160C7Ce3F30b999764Db";
-    const numOfDecimals = 18;
-    const provider = new ethers.providers.Web3Provider(window.ethereum);
-    const signer = provider.getSigner();
-    try {
-      const contractAbiFragment = ["function balanceOf(address owner) view returns (uint)"];
-      const contract = new ethers.Contract(ENGTokenAddress, contractAbiFragment, signer);
-      const balance = await contract.balanceOf(account);
-      const clearBalance = setBalanceWithDecimals(balance, numOfDecimals);
+  // const getEnergiTokenBalance = async (account: string): Promise<void> => {
+  //   if (!account) return;
+  //   const ENGTokenAddress = "0x62EE90d75f1BEc074A32160C7Ce3F30b999764Db";
+  //   const numOfDecimals = 18;
+  //   const provider = new ethers.providers.Web3Provider(window.ethereum);
+  //   const signer = provider.getSigner();
+  //   try {
+  //     const contractAbiFragment = ["function balanceOf(address owner) view returns (uint)"];
+  //     const contract = new ethers.Contract(ENGTokenAddress, contractAbiFragment, signer);
+  //     const balance = await contract.balanceOf(account);
+  //     const clearBalance = setBalanceWithDecimals(balance, numOfDecimals);
 
-      const details = await fetchTokenDetailsByCoinGecko("energi");
-      const price = details.market_data.current_price;
-      await Promise.all([balance, details]);
-      setENGBalance({
-        balance: clearBalance,
-        value: formatNumber(price.usd * Number(clearBalance)),
-      });
-    } catch (error) {
-      console.log(error);
-      setENGBalance({
-        balance: "0",
-        value: "$0.00",
-      });
-    }
-  };
+  //     const details = await fetchTokenDetailsByCoinGecko("energi");
+  //     const price = details.market_data.current_price;
+  //     await Promise.all([balance, details]);
+  //     setENGBalance({
+  //       balance: clearBalance,
+  //       value: formatNumber(price.usd * Number(clearBalance)),
+  //     });
+  //   } catch (error) {
+  //     console.log(error);
+  //     setENGBalance({
+  //       balance: "0",
+  //       value: "$0.00",
+  //     });
+  //   }
+  // };
 
   return (
     <WalletContext.Provider
