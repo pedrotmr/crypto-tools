@@ -66,6 +66,9 @@ const NavBar: React.FC<NavBarProps> = ({ isDarkMode, toggleDarkMode }) => {
     } else {
       setIsOnChartScreen(false);
     }
+    if (location.pathname === "/wallet") setSelected("Wallet");
+    if (location.pathname === "/send") setSelected("Send");
+    if (location.pathname === "/swap") setSelected("Swap");
   }, [location]);
 
   return (

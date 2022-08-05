@@ -5,6 +5,7 @@ import { useParams } from "react-router-dom";
 import { ChartData } from "../types/chart-data";
 import useSWR from "swr";
 import { getChartFormattedData } from "../api/getChartData";
+import ClipLoader from "react-spinners/ClipLoader";
 
 const CoinChart: React.FC = () => {
   const chartContainerRef = useRef<HTMLDivElement>(null);
@@ -57,7 +58,7 @@ const CoinChart: React.FC = () => {
   return (
     <div className='border border-spacing-4 rounded-xl justify-center items-center h-[calc(100vh-80px)] md:h-[calc(100vh-200px)] flex md:w-[85vw] max-w-screen-2xl mx-auto md:mt-6 p-2'>
       {!data ? (
-        <div>Loading...</div>
+        <ClipLoader color={"#701a75"} size={150} />
       ) : (
         <div ref={chartContainerRef} className=' h-full w-full flex-1 overflow-hidden' />
       )}

@@ -5,6 +5,7 @@ import EthereumLogo from "../assets/svg/ethereum";
 import MetamaskLogo from "../assets/svg/metamask";
 import { useWalletContext } from "../context/WalletContext";
 import { formatNumber } from "../utils";
+import ClipLoader from "react-spinners/ClipLoader";
 
 const sharedStyles = {
   headItem: "py-3 px-6",
@@ -70,7 +71,11 @@ const WalletBalance: React.FC = () => {
         <strong className='mt-2'>{totalBalance && formatNumber(totalBalance)}</strong>
       </div>
 
-      {!data && <div>Loading...</div>}
+      {!data && (
+        <div className='flex justify-center items-center p-8'>
+          <ClipLoader color={"#701a75"} size={150} />
+        </div>
+      )}
 
       {data && data.length > 0 && (
         <div className='rounded-xl w-full md:w-3/4 mx-auto overflow-x-auto mt-4 mb-8'>
