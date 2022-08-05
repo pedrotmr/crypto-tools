@@ -1,6 +1,6 @@
 import React from "react";
 import { useSort } from "../hooks/useSort";
-import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { TrendingTokens } from "../types/trending-tokens";
 import { Sparklines, SparklinesLine, SparklinesNormalBand } from "react-sparklines";
 
@@ -21,6 +21,8 @@ const sharedStyles = {
 const TokenTable: React.FC<TokenTableProps> = ({ trendingTokens }) => {
   const { sortedItems, sortIt, getClassForSortedColumn } = useSort(trendingTokens);
 
+  const navigate = useNavigate();
+
   const tableHeader: TableHeader[] = [
     { dataId: "id", name: "#" },
     { dataId: "name", name: "Coin" },
@@ -35,7 +37,7 @@ const TokenTable: React.FC<TokenTableProps> = ({ trendingTokens }) => {
   return (
     <div className='overflow-x-auto rounded-xl'>
       <table className='w-full text-sm text-left text-gray-500 h-[70px] dark:text-gray-200'>
-        <thead className='text-xs text-gray-700 dark:text-gray-50 bg-slate-200 dark:bg-gray-700'>
+        <thead className='text-xs text-gray-700 dark:text-gray-50 bg-gray-300 dark:bg-gray-600'>
           <tr>
             {tableHeader.map((header, idx) => (
               <th key={idx}>
@@ -51,13 +53,16 @@ const TokenTable: React.FC<TokenTableProps> = ({ trendingTokens }) => {
           </tr>
         </thead>
 
-        <tbody className='bg-slate-100 dark:text-gray-400 dark:bg-gray-800 dark:border-gray-700'>
+        <tbody className='bg-gray-100 dark:text-gray-400 dark:bg-gray-800 dark:border-gray-700'>
           {sortedItems &&
             sortedItems.map((token, index) => (
-              <tr key={index}>
+              <tr
+                key={index}
+                className='cursor-pointer hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors ease-out '
+                onClick={() => navigate(token.route)}>
                 <td className={sharedStyles.bodyItem}>{token.id}</td>
                 <td className={sharedStyles.bodyItem}>
-                  <span className='flex items-center gap-2'>
+                  <span className='flex w-max items-center gap-2'>
                     <img src={token.image} alt={`${token.name}-logo`} width={25} height={25} />
                     <span>{token.name}</span>
                   </span>
@@ -78,9 +83,7 @@ const TokenTable: React.FC<TokenTableProps> = ({ trendingTokens }) => {
                 </td>
                 <td className={sharedStyles.bodyItem}>{token.displayVolume24h}</td>
                 <td className={sharedStyles.bodyItem}>{token.displayMktCap}</td>
-                <td className={sharedStyles.bodyItem}>
-                  <Link to={token.route}>{renderSparkline(token.sparkline)}</Link>
-                </td>
+                <td className={sharedStyles.bodyItem}>{renderSparkline(token.sparkline)}</td>
               </tr>
             ))}
         </tbody>

@@ -28,7 +28,7 @@ const WalletBalance: React.FC = () => {
     setTooltipText("Copied!");
     setTimeout(() => {
       setTooltipText("Copy to clipboard");
-    }, 2000);
+    }, 1000);
   };
 
   return (

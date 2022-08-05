@@ -66,10 +66,6 @@ const NavBar: React.FC<NavBarProps> = ({ isDarkMode, toggleDarkMode }) => {
     } else {
       setIsOnChartScreen(false);
     }
-
-    if (location.pathname.startsWith("/wallet")) {
-      setSelected("Wallet");
-    }
   }, [location]);
 
   return (
