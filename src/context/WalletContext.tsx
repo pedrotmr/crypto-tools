@@ -95,7 +95,7 @@ export const WalletProvider: React.FC<React.PropsWithChildren> = ({ children }) 
   };
 
   const isConnectedToMainnet = (): boolean => {
-    return network === 1 || network === 4;
+    return network === 1;
   };
 
   const getEthBalance = async (userAddress: string | null = account): Promise<string | null> => {

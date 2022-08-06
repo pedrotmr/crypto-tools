@@ -20,9 +20,7 @@ const TableSkeleton = () => {
           {Array(10)
             .fill(Array(9).fill(null))
             .map((row, rowIdx) => (
-              <tr
-                key={rowIdx}
-                className='hover:bg-gray-200 dark:hover:bg-gray-700 p-4 transition-colors ease-out '>
+              <tr key={rowIdx}>
                 {row.map((_: any, colIdx: number) => (
                   <td key={colIdx} className='h-[calc(70vh/10)] first:w-14 '>
                     <div className='my-4 mx-3 h-5  rounded-lg bg-gray-400 dark:bg-gray-700 animate-pulse'></div>
