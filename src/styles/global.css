@@ -13,3 +13,39 @@ body {
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New", monospace;
 }
+
+*,
+html,
+body {
+  box-sizing: border-box;
+}
+
+input:-webkit-autofill {
+  -webkit-text-fill-color: #9ca3af;
+  transition: background-color 5000s ease-in-out 0s;
+}
+
+.bg-faded {
+  background: rgba(23, 42, 66, 0.4);
+}
+
+* {
+  scrollbar-width: auto;
+  scrollbar-height: auto;
+  scrollbar-color: #172a42 #191b1f;
+}
+
+*::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+
+*::-webkit-scrollbar-track {
+  background: #191b1f;
+}
+
+*::-webkit-scrollbar-thumb {
+  background-color: #172a42;
+  border-radius: 10px;
+  border: 3px solid #191b1f;
+}

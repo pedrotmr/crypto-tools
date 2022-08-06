@@ -1,21 +1,17 @@
 import React, { useState, useContext, useEffect } from "react";
 import { ethers } from "ethers";
-import { formatNumber, setBalanceWithDecimals } from "../utils";
-import { WalletBalance } from "../types/wallet-balance";
+import { setBalanceWithDecimals } from "../utils";
+import { TransactionTokens } from "../types/transaction-tokens";
+import erc20Tokens from "../api/db/transactionTokens.json";
+import { toast } from "react-toastify";
 
 type WalletContextType = {
   account: string | null;
   network: number | null;
-  ENGBalance: Balance | null;
-  tokenBalances: WalletBalance[] | null;
+  transactionTokens: TransactionTokens[] | null;
   connectWallet: () => Promise<void>;
   switchToMainnet: () => Promise<void>;
   isConnectedToMainnet: () => boolean;
-};
-
-type Balance = {
-  balance: string;
-  value: string;
 };
 
 declare let window: any;
@@ -26,14 +22,18 @@ export const useWalletContext = () => useContext(WalletContext);
 
 export const WalletProvider: React.FC<React.PropsWithChildren> = ({ children }) => {
   const [account, setAccount] = useState<string | null>(null);
+  const [ethBalance, setEthBalance] = useState<string | null>(null);
   const [network, setNetwork] = useState<number | null>(null);
-  const [ENGBalance, setENGBalance] = useState<Balance | null>(null);
-  const [tokenBalances, setTokenBalances] = useState<WalletBalance[] | null>(null);
+  const [transactionTokens, setTransactionTokens] = useState<TransactionTokens[]>([]);
 
   useEffect(() => {
     checkIfWalletIsConneceted();
     getNetwork();
   }, []);
+
+  useEffect(() => {
+    account && getTransactionTokensWithBalance();
+  }, [account, ethBalance]);
 
   useEffect(() => {
     if (window.ethereum) {
@@ -47,12 +47,28 @@ export const WalletProvider: React.FC<React.PropsWithChildren> = ({ children }) 
   }, []);
 
   const connectWallet = async (): Promise<void> => {
-    try {
-      const accounts = await window.ethereum.request({ method: "eth_requestAccounts" });
-      setAccount(accounts[0]);
-      switchToMainnet();
-    } catch (error) {
-      alert("Please install the Metamask extension");
+    if (!window.ethereum) {
+      toast.error(
+        <p className='hover:underline pr-4'>
+          <a href='https://metamask.io/' target='_blank'>
+            Please click here and Install Metamask
+          </a>
+        </p>
+      );
+    } else {
+      try {
+        const accounts = await window.ethereum.request({ method: "eth_requestAccounts" });
+        setAccount(accounts[0]);
+        setEthBalance(await getEthBalance(accounts[0]));
+        switchToMainnet();
+        toast.success(<span className='pr-4'>Wallet connected successfully</span>);
+      } catch (error) {
+        toast.error(
+          <span className='pr-4'>
+            You rejected the request to connect to the Metamask. Please try again.
+          </span>
+        );
+      }
     }
   };
 
@@ -61,6 +77,7 @@ export const WalletProvider: React.FC<React.PropsWithChildren> = ({ children }) 
     const accounts = await window.ethereum.request({ method: "eth_accounts" });
     if (!accounts.length) return setAccount(null);
     setAccount(accounts[0]);
+    setEthBalance(await getEthBalance(accounts[0]));
   };
 
   const switchToMainnet = async (): Promise<void> => {
@@ -78,44 +95,57 @@ export const WalletProvider: React.FC<React.PropsWithChildren> = ({ children }) 
   };
 
   const isConnectedToMainnet = (): boolean => {
-    return network === 1;
+    return network === 1 || network === 4;
   };
 
-  // const getEnergiTokenBalance = async (account: string): Promise<void> => {
-  //   if (!account) return;
-  //   const ENGTokenAddress = "0x62EE90d75f1BEc074A32160C7Ce3F30b999764Db";
-  //   const numOfDecimals = 18;
-  //   const provider = new ethers.providers.Web3Provider(window.ethereum);
-  //   const signer = provider.getSigner();
-  //   try {
-  //     const contractAbiFragment = ["function balanceOf(address owner) view returns (uint)"];
-  //     const contract = new ethers.Contract(ENGTokenAddress, contractAbiFragment, signer);
-  //     const balance = await contract.balanceOf(account);
-  //     const clearBalance = setBalanceWithDecimals(balance, numOfDecimals);
+  const getEthBalance = async (userAddress: string | null = account): Promise<string | null> => {
+    if (account) return null;
+    const provider = new ethers.providers.Web3Provider(window.ethereum);
+    const balance = await provider.getBalance(userAddress as string);
+    const convertedBalance = ethers.utils.formatEther(balance);
+    return Number(convertedBalance).toFixed(5);
+  };
 
-  //     const details = await fetchTokenDetailsByCoinGecko("energi");
-  //     const price = details.market_data.current_price;
-  //     await Promise.all([balance, details]);
-  //     setENGBalance({
-  //       balance: clearBalance,
-  //       value: formatNumber(price.usd * Number(clearBalance)),
-  //     });
-  //   } catch (error) {
-  //     console.log(error);
-  //     setENGBalance({
-  //       balance: "0",
-  //       value: "$0.00",
-  //     });
-  //   }
-  // };
+  const getTokenBalance = async (
+    tokenAdress: string,
+    tokenNumOfDecimals: number,
+    userAddress: string | null = account
+  ): Promise<string | null> => {
+    if (!userAddress) return null;
+    const provider = new ethers.providers.Web3Provider(window.ethereum);
+    const signer = provider.getSigner();
+    try {
+      const contractAbiFragment = ["function balanceOf(address owner) view returns (uint)"];
+      const contract = new ethers.Contract(tokenAdress, contractAbiFragment, signer);
+      const balance = await contract.balanceOf(userAddress);
+      const convertedBalance = setBalanceWithDecimals(balance, tokenNumOfDecimals);
+      return Number(convertedBalance) === 0 ? "0" : convertedBalance;
+    } catch (error) {
+      return null;
+    }
+  };
+
+  const getTransactionTokensWithBalance = async (): Promise<void> => {
+    const formattedData = erc20Tokens.map(async (token) => {
+      let balance = await getTokenBalance(token.contractAddress, token.decimals);
+      if (token.symbol === "ETH" && ethBalance) {
+        balance = ethBalance;
+      }
+      return {
+        ...token,
+        balance: balance,
+      };
+    });
+    const transactionTokens = await Promise.all(formattedData);
+    setTransactionTokens(transactionTokens);
+  };
 
   return (
     <WalletContext.Provider
       value={{
         account,
         network,
-        ENGBalance,
-        tokenBalances,
+        transactionTokens,
         connectWallet,
         isConnectedToMainnet,
         switchToMainnet,

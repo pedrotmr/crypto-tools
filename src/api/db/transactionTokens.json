@@ -1,0 +1,114 @@
+[
+  {
+    "symbol": "ETH",
+    "name": "Ether",
+    "contractAddress": "0x0000000000000000000000000000000000000000",
+    "decimals": 18,
+    "logo": "https://i.ibb.co/41jz9cZ/eth.png"
+  },
+  {
+    "symbol": "WETH",
+    "name": "Wrapped Ether",
+    "contractAddress": "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2",
+    "decimals": 18,
+    "logo": "https://cryptologos.cc/logos/ethereum-eth-logo.png?v=023"
+  },
+  {
+    "symbol": "USDT",
+    "name": "Theter USD",
+    "contractAddress": "0xdac17f958d2ee523a2206206994597c13d831ec7",
+    "decimals": 6,
+    "logo": "https://cryptologos.cc/logos/tether-usdt-logo.png?v=023"
+  },
+  {
+    "symbol": "USDC",
+    "name": "USD Coin",
+    "contractAddress": "0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48",
+    "decimals": 6,
+    "logo": "https://cryptologos.cc/logos/usd-coin-usdc-logo.png?v=023"
+  },
+  {
+    "symbol": "DAI",
+    "name": "Dai",
+    "contractAddress": "0x6b175474e89094c44da98b954eedeac495271d0f",
+    "decimals": 18,
+    "logo": "https://cryptologos.cc/logos/multi-collateral-dai-dai-logo.png?v=023"
+  },
+  {
+    "symbol": "SHIB",
+    "name": "Shiba Inu",
+    "contractAddress": "0x95ad61b0a150d79219dcf64e1e6cc01f0b64c4ce",
+    "decimals": 18,
+    "logo": "https://cryptologos.cc/logos/shiba-inu-shib-logo.png?v=023"
+  },
+  {
+    "symbol": "LINK",
+    "name": "Chainlink",
+    "contractAddress": "0x514910771af9ca656af840dff83e8264ecf986ca",
+    "decimals": 18,
+    "logo": "https://cryptologos.cc/logos/chainlink-link-logo.png?v=023"
+  },
+  {
+    "symbol": "GALA",
+    "name": "Gala",
+    "contractAddress": "0x15d4c048f83bd7e37d49ea4c83a07267ec4203da",
+    "decimals": 8,
+    "logo": "https://cryptologos.cc/logos/gala-gala-logo.png?v=023"
+  },
+  {
+    "symbol": "APE",
+    "name": "Ape Coin",
+    "contractAddress": "0x4d224452801aced8b2f0aebe155379bb5d594381",
+    "decimals": 18,
+    "logo": "https://www.freelogovectors.net/wp-content/uploads/2022/05/apecoin_logo_ape_freelogovectors.net_.png"
+  },
+  {
+    "symbol": "SAND",
+    "name": "The Sandbox",
+    "contractAddress": "0x3845badade8e6dff049820680d1f14bd3903a5d0",
+    "decimals": 18,
+    "logo": "https://cryptologos.cc/logos/the-sandbox-sand-logo.png?v=023"
+  },
+  {
+    "symbol": "UNI",
+    "name": "Uniswap",
+    "contractAddress": "0x1f9840a85d5af5bf1d1762f925bdaddc4201f984",
+    "decimals": 18,
+    "logo": "https://cryptologos.cc/logos/uniswap-uni-logo.png?v=023"
+  },
+  {
+    "symbol": "AAVE",
+    "name": "Aave",
+    "contractAddress": "0x7fc66500c84a76ad7e9c93437bfc5ac33e2ddae9",
+    "decimals": 18,
+    "logo": "https://cryptologos.cc/logos/aave-aave-logo.png?v=023"
+  },
+  {
+    "symbol": "QNT",
+    "name": "Quant",
+    "contractAddress": "0x4a220e6096b25eadb88358cb44068a3248254675",
+    "decimals": 18,
+    "logo": "https://cryptologos.cc/logos/quant-qnt-logo.png?v=023"
+  },
+  {
+    "symbol": "CRO",
+    "name": "Cronos",
+    "contractAddress": "0xa0b73e1ff0b80914ab6fe0444e65848c4c34450b",
+    "decimals": 8,
+    "logo": "https://cryptologos.cc/logos/cronos-cro-logo.png?v=023"
+  },
+  {
+    "symbol": "AXS",
+    "name": "Axie Infinity",
+    "contractAddress": "0xBB0E17EF65F82Ab018d8EDd776e8DD940327B28b",
+    "decimals": 18,
+    "logo": "https://cryptologos.cc/logos/axie-infinity-axs-logo.png?v=023"
+  },
+  {
+    "symbol": "1INCH",
+    "name": "1Inch",
+    "contractAddress": "0x111111111117dC0aa78b770fA6A738034120C302",
+    "decimals": 18,
+    "logo": "https://cryptologos.cc/logos/1inch-1inch-logo.png?v=023"
+  }
+]

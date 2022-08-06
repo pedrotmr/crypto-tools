@@ -13,8 +13,7 @@ const sharedStyles = {
 };
 
 const WalletBalance: React.FC = () => {
-  const { account, isConnectedToMainnet, switchToMainnet, ENGBalance, tokenBalances } =
-    useWalletContext();
+  const { account, isConnectedToMainnet, switchToMainnet } = useWalletContext();
 
   const [tooltipText, setTooltipText] = useState("Copy to clipboard");
 
@@ -33,8 +32,8 @@ const WalletBalance: React.FC = () => {
   };
 
   return (
-    <div className='p-4 mt-10 rounded-lg w-full md:w-3/4 mx-auto flex flex-col bg-slate-200 dark:bg-gray-800'>
-      <div className='flex p-2 dark:border-gray-700 border-b justify-between'>
+    <div className='p-4 mt-10 rounded-lg w-full md:w-3/4 mx-auto flex flex-col bg-gray-200 dark:bg-gray-800'>
+      <div className='flex p-2 border-gray-300 dark:border-gray-700 border-b justify-between'>
         <div className='flex items-center gap-3'>
           <EthereumLogo className='grayscale' width={18} height={18} />
           <span>Ethereum Network</span>
@@ -78,9 +77,9 @@ const WalletBalance: React.FC = () => {
       )}
 
       {data && data.length > 0 && (
-        <div className='rounded-xl w-full md:w-3/4 mx-auto overflow-x-auto mt-4 mb-8'>
+        <div className='rounded-xl w-full md:w-3/5 mx-auto overflow-x-auto mt-4 mb-8'>
           <table className='w-full px-4 text-sm text-left text-gray-500 dark:text-gray-200'>
-            <thead className='text-xs text-gray-700 dark:text-gray-50 bg-slate-300 dark:bg-gray-700'>
+            <thead className='text-xs text-gray-700 dark:text-gray-50 bg-gray-300 dark:bg-gray-700'>
               <tr>
                 <th className='py-3 px-6'>Coin</th>
                 <th className='py-3 px-6'>Balance</th>
@@ -88,7 +87,7 @@ const WalletBalance: React.FC = () => {
               </tr>
             </thead>
 
-            <tbody className='bg-slate-100 dark:text-gray-400 dark:bg-gray-900 dark:border-gray-700'>
+            <tbody className='bg-gray-100 dark:text-gray-400 dark:bg-gray-900 dark:border-gray-700'>
               {data.map((token, index) => (
                 <tr key={index}>
                   <td className={sharedStyles.bodyItem}>

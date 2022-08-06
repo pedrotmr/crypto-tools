@@ -4,6 +4,7 @@ import TokenTable from "../components/TokenTable";
 import useSWRInfinite from "swr/infinite";
 import { getTrendingTokensTableData } from "../api/getTrendingTokens";
 import { TrendingTokens } from "../types/trending-tokens";
+import TableSkeleton from "../components/TableSkeleton";
 
 const Home: React.FC = () => {
   const navigate = useNavigate();
@@ -24,7 +25,7 @@ const Home: React.FC = () => {
 
   return (
     <div className='my-8 lg:px-8'>
-      <TokenTable trendingTokens={trendingTokens} />
+      {!data ? <TableSkeleton /> : <TokenTable trendingTokens={trendingTokens} />}
       <div className='flex justify-center items-center mt-6'>
         <button
           className='py-2 px-4 text-sm rounded-lg text-gray-500 bg-white inline-flex items-center border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white'

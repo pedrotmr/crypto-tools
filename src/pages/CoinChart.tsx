@@ -56,7 +56,7 @@ const CoinChart: React.FC = () => {
   }, [data, isDarkMode]);
 
   return (
-    <div className='border border-spacing-4 rounded-xl justify-center items-center h-[calc(100vh-80px)] md:h-[calc(100vh-200px)] flex md:w-[85vw] max-w-screen-2xl mx-auto md:mt-6 p-2'>
+    <div className='border border-spacing-4 border-gray-500 rounded-xl justify-center items-center h-[calc(100vh-80px)] md:h-[calc(100vh-200px)] flex md:w-[85vw] max-w-screen-2xl mx-auto md:mt-6 p-2'>
       {!data ? (
         <ClipLoader color={"#701a75"} size={150} />
       ) : (
