@@ -115,18 +115,21 @@ const Send = () => {
     e.preventDefault();
     const { recipient, amount } = formData;
 
-    // if (!amount) {
-    //   return handleError("amount", "Amount is required");
-    // }
-    // if (!recipient) {
-    //   return handleError("recipient", "Address is required");
-    // }
-    // if (!ethers.utils.isAddress(recipient)) {
-    //   return handleError("recipient", "Invalid address");
-    // }
-    // if (Number(amount) > Number(selectedToken?.balance)) {
-    //   return handleError("amount", "Insufficient funds");
-    // }
+    if (!amount) {
+      return handleError("amount", "Amount is required");
+    }
+    if (!recipient) {
+      return handleError("recipient", "Address is required");
+    }
+    if (recipient === account) {
+      return handleError("recipient", "Address is the same as current user");
+    }
+    if (!ethers.utils.isAddress(recipient)) {
+      return handleError("recipient", "Invalid address");
+    }
+    if (Number(amount) > Number(selectedToken?.balance)) {
+      return handleError("amount", "Insufficient funds");
+    }
     sendToken(selectedToken, recipient, amount);
   };
 
