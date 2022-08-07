@@ -97,7 +97,7 @@ const Send = () => {
 
   const allowOnlyDigits = (e: React.KeyboardEvent<HTMLInputElement>): void => {
     const key = e.key;
-    const regex = /[^0-9.,]/g;
+    const regex = /[^0-9.]/g;
 
     if (regex.test(key)) {
       e.preventDefault();
@@ -150,6 +150,7 @@ const Send = () => {
             onChange={handleChange}
             onPaste={handlePaste}
             onKeyPress={allowOnlyDigits}
+            autoComplete='off'
           />
           {errorMessage?.amount && renderErrorMessage(errorMessage?.amount)}
 
