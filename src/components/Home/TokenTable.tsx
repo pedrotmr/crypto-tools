@@ -1,7 +1,7 @@
 import React from "react";
-import { useSort } from "../hooks/useSort";
+import { useSort } from "../../hooks/useSort";
 import { useNavigate } from "react-router-dom";
-import { TrendingTokens } from "../types/trending-tokens";
+import { TrendingTokens } from "../../types/trending-tokens";
 import { Sparklines, SparklinesLine, SparklinesNormalBand } from "react-sparklines";
 
 type TableHeader = {

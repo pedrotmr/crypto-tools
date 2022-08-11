@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from "react";
 import ClipLoader from "react-spinners/ClipLoader";
-import { useWalletContext } from "../context/WalletContext";
+import { useWalletContext } from "../../context/WalletContext";
 import { FiArrowUpRight } from "react-icons/fi";
 import { Player } from "@lottiefiles/react-lottie-player";
-import { TransactionInfo } from "../types/transaction-info";
+import { TransactionInfo } from "../../types/transaction-info";
 
 type LoadingModalProps = {
   isLoading: boolean;

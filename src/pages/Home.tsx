@@ -1,10 +1,10 @@
 import React, { useEffect } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
-import TokenTable from "../components/TokenTable";
+import TokenTable from "../components/Home/TokenTable";
 import useSWRInfinite from "swr/infinite";
 import { getTrendingTokensTableData } from "../api/getTrendingTokens";
 import { TrendingTokens } from "../types/trending-tokens";
-import TableSkeleton from "../components/TableSkeleton";
+import TableSkeleton from "../components/Home/TableSkeleton";
 
 const Home: React.FC = () => {
   const navigate = useNavigate();

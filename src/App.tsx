@@ -16,7 +16,7 @@ const App: React.FC = () => {
 
   const toastProps: ToastContainerProps = {
     position: "bottom-right",
-    autoClose: 5000,
+    autoClose: 3000,
     closeOnClick: false,
     pauseOnHover: false,
     newestOnTop: true,

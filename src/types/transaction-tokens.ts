@@ -5,4 +5,5 @@ export type TransactionTokens = {
   decimals: number;
   contractAddress: string;
   balance: string | null;
+  price: number;
 };

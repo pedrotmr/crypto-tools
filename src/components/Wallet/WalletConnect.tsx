@@ -1,6 +1,6 @@
 import React from "react";
-import MetamaskLogo from "../assets/svg/metamask";
-import { useWalletContext } from "../context/WalletContext";
+import MetamaskLogo from "../../assets/svg/metamask";
+import { useWalletContext } from "../../context/WalletContext";
 
 const WalletConnect: React.FC = () => {
   const { connectWallet } = useWalletContext();

@@ -1,9 +1,10 @@
-import React, { useState, useContext, useEffect } from "react";
 import { ethers } from "ethers";
-import { setBalanceWithDecimals } from "../utils";
-import { TransactionTokens } from "../types/transaction-tokens";
-import erc20Tokens from "../api/db/transactionTokens.json";
+import React, { useContext, useEffect, useState } from "react";
 import { toast } from "react-toastify";
+import erc20Tokens from "../api/db/transactionTokens.json";
+import { fetchTokenInfoByEthplorer } from "../api/ethplorer";
+import { TransactionTokens } from "../types/transaction-tokens";
+import { setBalanceWithDecimals } from "../utils";
 
 type WalletContextType = {
   account: string | null;
@@ -32,7 +33,7 @@ export const WalletProvider: React.FC<React.PropsWithChildren> = ({ children }) 
   }, []);
 
   useEffect(() => {
-    account && getTransactionTokensWithBalance();
+    account && ethBalance && getTransactionTokensWithBalance();
   }, [account, ethBalance]);
 
   useEffect(() => {
@@ -128,12 +129,16 @@ export const WalletProvider: React.FC<React.PropsWithChildren> = ({ children }) 
   const getTransactionTokensWithBalance = async (): Promise<void> => {
     const formattedData = erc20Tokens.map(async (token) => {
       let balance = await getTokenBalance(token.contractAddress, token.decimals);
+      const data = await fetchTokenInfoByEthplorer(token.contractAddress);
+
       if (token.symbol === "ETH" && ethBalance) {
         balance = ethBalance;
       }
+
       return {
         ...token,
         balance: balance,
+        price: data.price.rate,
       };
     });
     const transactionTokens = await Promise.all(formattedData);

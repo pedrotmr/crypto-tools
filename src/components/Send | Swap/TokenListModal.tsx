@@ -1,18 +1,33 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import { RiCloseFill } from "react-icons/ri";
-import { useWalletContext } from "../context/WalletContext";
-import { TransactionTokens } from "../types/transaction-tokens";
+import { useWalletContext } from "../../context/WalletContext";
+import { TransactionTokens } from "../../types/transaction-tokens";
 
 type TokenListModalProps = {
   closeModal: () => void;
-  selectToken: (token: TransactionTokens) => void;
+  selectToken?: (token: TransactionTokens) => void;
+  selectTokenFrom?: (token: TransactionTokens) => void;
+  selectTokenTo?: (token: TransactionTokens) => void;
 };
 
-const TokenListModal: React.FC<TokenListModalProps> = ({ closeModal, selectToken }) => {
+const TokenListModal: React.FC<TokenListModalProps> = ({
+  closeModal,
+  selectToken,
+  selectTokenFrom,
+  selectTokenTo,
+}) => {
   const { transactionTokens } = useWalletContext();
 
   const handleTokenClick = (token: TransactionTokens) => {
-    selectToken(token);
+    if (selectToken) {
+      selectToken(token);
+    }
+    if (selectTokenFrom) {
+      selectTokenFrom(token);
+    }
+    if (selectTokenTo) {
+      selectTokenTo(token);
+    }
     closeModal();
   };
 
@@ -33,11 +48,6 @@ const TokenListModal: React.FC<TokenListModalProps> = ({ closeModal, selectToken
                   <div className='flex items-center'>
                     <img src={token.logo} alt={`${token.name}-logo`} height={30} width={30} />
                   </div>
-                  {/* <div className='flex ml-4 items-center gap-2'>
-                  <div>{token.symbol}</div>
-                  <span className='text-[#aaaaa3]'>-</span>
-                  <div className='text-[#aaaaa3] text-sm'>{token.name}</div>
-                </div> */}
                   <div className='flex flex-col ml-4 leading-5'>
                     <span>{token.symbol}</span>
                     <span className='text-xs text-[#aaaaa3]'>{token.name}</span>

@@ -1,11 +1,11 @@
 import React, { useState } from "react";
-import useSWR from "swr";
-import { getAddressInfo } from "../api/getAddressInfo";
-import EthereumLogo from "../assets/svg/ethereum";
-import MetamaskLogo from "../assets/svg/metamask";
-import { useWalletContext } from "../context/WalletContext";
-import { formatNumber } from "../utils";
 import ClipLoader from "react-spinners/ClipLoader";
+import useSWR from "swr";
+import { getAddressInfo } from "../../api/getAddressInfo";
+import EthereumLogo from "../../assets/svg/ethereum";
+import MetamaskLogo from "../../assets/svg/metamask";
+import { useWalletContext } from "../../context/WalletContext";
+import { formatNumber } from "../../utils";
 
 const sharedStyles = {
   headItem: "py-3 px-6",
