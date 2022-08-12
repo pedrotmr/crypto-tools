@@ -38,7 +38,9 @@ export const WalletProvider: React.FC<React.PropsWithChildren> = ({ children }) 
 
   useEffect(() => {
     if (window.ethereum) {
-      window.ethereum.on("chainChanged", getNetwork);
+      window.ethereum.on("chainChanged", () => {
+        getNetwork(), window.location.reload();
+      });
       window.ethereum.on("accountsChanged", checkIfWalletIsConneceted);
       return () => {
         window.ethereum.removeListener("chainChanged", getNetwork);

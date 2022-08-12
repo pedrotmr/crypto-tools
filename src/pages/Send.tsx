@@ -121,7 +121,9 @@ const Send = () => {
       tokenListSecondModalOpen={false}
       isLoading={isLoading}
       transactionInfo={transactionInfo}
-      closeLoadingModal={() => setLoadingModalOpen(false)}
+      closeLoadingModal={() => {
+        setLoadingModalOpen(false), window.location.reload();
+      }}
       closeTokenListModal={() => setTokenListModalOpen(false)}
       selectToken={(token: TransactionTokens) => setSelectedToken(token)}>
       <Input

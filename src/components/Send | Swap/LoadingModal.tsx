@@ -1,8 +1,8 @@
+import { Player } from "@lottiefiles/react-lottie-player";
 import React, { useEffect, useState } from "react";
+import { FiArrowUpRight } from "react-icons/fi";
 import ClipLoader from "react-spinners/ClipLoader";
 import { useWalletContext } from "../../context/WalletContext";
-import { FiArrowUpRight } from "react-icons/fi";
-import { Player } from "@lottiefiles/react-lottie-player";
 import { TransactionInfo } from "../../types/transaction-info";
 
 type LoadingModalProps = {
@@ -59,6 +59,36 @@ const LoadingModal: React.FC<LoadingModalProps> = ({ isLoading, transactionInfo 
           </span>
           to
           <span className='mx-2 text-[#f48706]'>{transactionInfo.recipient.slice(0, 8)}...</span>
+        </p>
+        <div
+          onClick={() => openEtherscan(transactionInfo.txHash)}
+          className='flex text-blue-500 hover:underline gap-1 cursor-pointer'>
+          View on Etherscan
+          <FiArrowUpRight />
+        </div>
+      </div>
+    );
+  }
+
+  if (transactionInfo?.type === "swap" && transactionInfo.txHash) {
+    return (
+      <div className={style.wrapper}>
+        <Player
+          autoplay
+          keepLastFrame
+          speed={0.7}
+          src='https://assets3.lottiefiles.com/packages/lf20_lk80fpsm.json'
+          style={{ height: "150px", width: "150px" }}></Player>
+        <p className='text-lg mt-2'>Transaction Complete</p>
+        <p>
+          You just swapped
+          <span className='mx-2 text-[#f48706] font-bold'>
+            {Number(transactionInfo?.amountFrom).toLocaleString()} {transactionInfo?.tokenFrom}
+          </span>
+          to
+          <span className='mx-2 text-[#f48706] font-bold'>
+            {Number(transactionInfo?.amountTo).toLocaleString()} {transactionInfo?.tokenTo}
+          </span>
         </p>
         <div
           onClick={() => openEtherscan(transactionInfo.txHash)}

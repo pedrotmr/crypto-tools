@@ -1,5 +1,8 @@
+import { ethers } from "ethers";
 import React, { useEffect, useState } from "react";
 import { IoIosSwap } from "react-icons/io";
+import { toast } from "react-toastify";
+import { ChainId, ETH, UniswapPair } from "simple-uniswap-sdk";
 import FormWrapper from "../components/Send | Swap/FormWrapper";
 import Input from "../components/Send | Swap/Input";
 import TransactionButton from "../components/Send | Swap/TransactionButton";
@@ -13,7 +16,7 @@ const Swap = () => {
   const [selectedTokenFrom, setSelectedTokenFrom] = useState<TransactionTokens>();
   const [selectedTokenTo, setSelectedTokenTo] = useState<TransactionTokens>();
   const [formData, setFormData] = useState({ tokenFromAmount: "", tokenToAmount: "" });
-  const [errorMessage, setErrorMessage] = useState({ recipient: "", amount: "" });
+  const [errorMessage, setErrorMessage] = useState({ tokenFromAmount: "", tokenToAmount: "" });
   const [isLoading, setIsLoading] = useState(false);
   const [loadingModalOpen, setLoadingModalOpen] = useState(false);
   const [tokenListModalOpen, setTokenListModalOpen] = useState(false);
@@ -54,86 +57,91 @@ const Swap = () => {
     setFormData({ tokenFromAmount: _tokenToAmount, tokenToAmount: _tokenFromAmount });
   };
 
-  // const transactionStart = async (
-  //   transaction: ethers.providers.TransactionResponse,
-  //   recipient: string,
-  //   convertedAmount: string,
-  //   tokenSymbol = "ETH"
-  // ) => {
-  //   setIsLoading(true);
-  //   setLoadingModalOpen(true);
-  //   await transaction.wait();
-  //   // setTransactionInfo({
-  //   //   ...transactionInfo,
-  //   //   txHash: transaction.hash,
-  //   //   recipient: recipient,
-  //   //   amount: convertedAmount,
-  //   //   token: tokenSymbol,
-  //   // });
-  //   setIsLoading(false);
-  //   setFormData({ tokenFromAmount: "", tokenToAmount: "" });
-  // };
+  const transactionStart = async (trade: any) => {
+    try {
+      const provider = new ethers.providers.Web3Provider(window.ethereum);
+      const signer = provider.getSigner();
+      const tradeTransaction = await signer.sendTransaction(trade);
+      setIsLoading(true);
+      setLoadingModalOpen(true);
+      const tradeReceipt = await tradeTransaction.wait();
+      setTransactionInfo({
+        ...transactionInfo,
+        amountFrom: formData.tokenFromAmount,
+        tokenFrom: selectedTokenFrom!.symbol,
+        amountTo: formData.tokenToAmount,
+        tokenTo: selectedTokenTo!.symbol,
+        txHash: tradeReceipt.transactionHash,
+      });
+      setIsLoading(false);
+      setFormData({ tokenFromAmount: "", tokenToAmount: "" });
+    } catch (error) {
+      if (error instanceof Error) {
+        toast.error(<span className='pr-5'>{error.message}</span>);
+      }
+    }
+  };
 
-  // const sendToken = async (
-  //   token: TransactionTokens | undefined,
-  //   recipient: string,
-  //   amount: string
-  // ): Promise<void> => {
-  //   if (!token) return;
-  //   const provider = new ethers.providers.Web3Provider(window.ethereum);
-  //   const signer = provider.getSigner();
-  //   try {
-  //     if (token === transactionTokens?.[0]) {
-  //       const transaction = await signer.sendTransaction({
-  //         to: recipient,
-  //         value: ethers.utils.parseEther(amount),
-  //       });
-  //       transactionStart(transaction, recipient, amount);
-  //     } else {
-  //       const contractAbiFragment = ["function transfer(address, uint256)"];
-  //       const contract = new Contract(token.contractAddress, contractAbiFragment, signer);
-  //       const numberOfTokens = ethers.utils.parseUnits(amount, token.decimals);
-  //       const transaction = await contract.transfer(recipient, numberOfTokens);
-  //       transactionStart(transaction, recipient, amount);
-  //     }
-  //   } catch (error: unknown) {
-  //     if (error instanceof Error) {
-  //       toast.error(<span className='pr-5'>{error.message}</span>);
-  //     }
-  //   }
-  // };
+  const swapToken = async (
+    tokenFromAddress: string,
+    tokenToAddress: string,
+    tokenFromAmount: string
+  ) => {
+    try {
+      const uniswapPair = new UniswapPair({
+        fromTokenContractAddress:
+          tokenFromAddress === ethers.constants.AddressZero
+            ? ETH.MAINNET().contractAddress
+            : tokenFromAddress,
+        toTokenContractAddress:
+          tokenToAddress === ethers.constants.AddressZero
+            ? ETH.MAINNET().contractAddress
+            : tokenToAddress,
+        ethereumAddress: account!,
+        chainId: ChainId.MAINNET,
+      });
+      const uniswapPairFactory = await uniswapPair.createFactory();
+      const trade = await uniswapPairFactory.trade(tokenFromAmount);
+      if (trade.approvalTransaction) {
+        transactionStart(trade.approvalTransaction);
+      } else {
+        transactionStart(trade.transaction);
+      }
+    } catch (error) {
+      if (error instanceof Error) {
+        toast.error(<span className='pr-5'>{error.message}</span>);
+      }
+    }
+  };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>): void => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-  // const handleError = (inputField: "tokenFromAmount" | "tokenToAmount", message: string) => {
-  //   setErrorMessage({ ...errorMessage, [inputField]: message });
-  //   return setTimeout(() => {
-  //     setErrorMessage({ ...errorMessage, [inputField]: "" });
-  //   }, 5000);
-  // };
+  const handleError = (inputField: "tokenFromAmount" | "tokenToAmount", message: string) => {
+    setErrorMessage({ ...errorMessage, [inputField]: message });
+    return setTimeout(() => {
+      setErrorMessage({ ...errorMessage, [inputField]: "" });
+    }, 5000);
+  };
 
   const handleSubmit = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
     e.preventDefault();
-    const { tokenFromAmount, tokenToAmount } = formData;
-
-    // if (!amount) {
-    //   return handleError("amount", "Amount is required");
-    // }
-    // if (!tokenFromAmount) {
-    //   return handleError("recipient", "Address is required");
-    // }
-    // if (recipient === account) {
-    //   return handleError("recipient", "Address is the same as current user");
-    // }
-    // if (!ethers.utils.isAddress(recipient)) {
-    //   return handleError("recipient", "Invalid address");
-    // }
-    // if (Number(amount) > Number(selectedToken?.balance)) {
-    //   return handleError("amount", "Insufficient funds");
-    // }
-    // sendToken(selectedToken, recipient, amount);
+    const { tokenFromAmount } = formData;
+    if (!tokenFromAmount) {
+      return handleError("tokenFromAmount", "Amount is required");
+    }
+    if (selectedTokenFrom === selectedTokenTo) {
+      return handleError("tokenFromAmount", "Select different tokens");
+    }
+    if (Number(tokenFromAmount) > Number(selectedTokenFrom?.balance)) {
+      return handleError("tokenFromAmount", "Insufficient funds");
+    }
+    swapToken(
+      selectedTokenFrom!.contractAddress,
+      selectedTokenTo!.contractAddress,
+      tokenFromAmount
+    );
   };
 
   return (
@@ -155,7 +163,7 @@ const Swap = () => {
         name='tokenFromAmount'
         value={formData?.tokenFromAmount}
         handleChange={handleChange}
-        errorMessage={errorMessage.amount}
+        errorMessage={errorMessage.tokenFromAmount}
         selectedTokenFrom={selectedTokenFrom}
         openSelectTokenModal={() => setTokenListModalOpen(true)}
         setMaxValue={() =>
@@ -166,7 +174,7 @@ const Swap = () => {
         <button
           onClick={swapInputData}
           className='p-1 border-4 border-gray-200 dark:border-gray-700 bg-gray-100 dark:bg-gray-800 rounded-xl'>
-          <IoIosSwap className='text-2xl ' />
+          <IoIosSwap className='text-md md:text-2xl ' />
         </button>
       </div>
       <Input
@@ -174,7 +182,7 @@ const Swap = () => {
         name='tokenToAmount'
         value={formData?.tokenToAmount}
         handleChange={handleChange}
-        errorMessage={errorMessage.amount}
+        errorMessage={errorMessage.tokenToAmount}
         selectedTokenTo={selectedTokenTo}
         openSelectTokenModal={() => setTokenListSecondModalOpen(true)}
       />
