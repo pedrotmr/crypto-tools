@@ -1,6 +1,6 @@
 # Crypto Tools
 
-This application allow users to track the top trending cryptocurrencies out there, get a detailed price chart, and track their Metamask Wallet balance. Users can also send and swap erc20tokens from the Ethereum newtork.
+This application allow users to track the top trending cryptocurrencies out there, get a detailed price chart, and track their Metamask Wallet balance. Users can also send and swap tokens from the Ethereum newtork.
 
 You can check the deployed version at: https://web3-dapp-iota.vercel.app/
 
