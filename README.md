@@ -19,4 +19,4 @@ cd web3-dapp
 ```
 ````
 yarn
-yarn dev
+yarn start

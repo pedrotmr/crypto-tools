@@ -1,8 +1,8 @@
 import React from "react";
-import { useSort } from "../../hooks/useSort";
 import { useNavigate } from "react-router-dom";
+import { Sparklines, SparklinesLine } from "react-sparklines";
+import { useSort } from "../../hooks/useSort";
 import { TrendingTokens } from "../../types/trending-tokens";
-import { Sparklines, SparklinesLine, SparklinesNormalBand } from "react-sparklines";
 
 type TableHeader = {
   dataId: keyof TrendingTokens;
@@ -29,40 +29,42 @@ const TokenTable: React.FC<TokenTableProps> = ({ trendingTokens }) => {
     { dataId: "symbol", name: "" },
     { dataId: "price", name: "Price" },
     { dataId: "priceChange24h", name: "24h" },
-    { dataId: "priceChange7d", name: "7d" },
+    // { dataId: "priceChange7d", name: "7d" },
     { dataId: "volume24h", name: "24h Volume" },
     { dataId: "mktCap", name: "Mkt Cap" },
   ];
 
   return (
-    <div className='overflow-x-auto rounded-xl'>
-      <table className='w-full text-sm text-left text-gray-500 h-[70px] dark:text-gray-200'>
-        <thead className='text-xs text-gray-700 dark:text-gray-50 bg-gray-300 dark:bg-gray-600'>
+    <div className="overflow-x-auto rounded-xl">
+      <table className="w-full text-sm text-left text-gray-500 h-[70px] dark:text-gray-200">
+        <thead className="text-xs text-gray-700 dark:text-gray-50 bg-gray-300 dark:bg-gray-600">
           <tr>
             {tableHeader.map((header, idx) => (
               <th key={idx}>
                 <button
                   aria-label={`sort by ${header.dataId}`}
                   className={`${sharedStyles.headItem} ${getClassForSortedColumn(header.dataId)} `}
-                  onClick={() => sortIt(header.dataId)}>
+                  onClick={() => sortIt(header.dataId)}
+                >
                   {header.name}
                 </button>
               </th>
             ))}
-            <th className={sharedStyles.headItem}>Last 7 days</th>
+            {/* <th className={sharedStyles.headItem}>Last 7 days</th> */}
           </tr>
         </thead>
 
-        <tbody className='bg-gray-100 dark:text-gray-400 dark:bg-gray-800 dark:border-gray-700'>
+        <tbody className="bg-gray-100 dark:text-gray-400 dark:bg-gray-800 dark:border-gray-700">
           {sortedItems &&
             sortedItems.map((token, index) => (
               <tr
                 key={index}
-                className='cursor-pointer hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors ease-out '
-                onClick={() => navigate(token.route)}>
+                className="cursor-pointer hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors ease-out "
+                onClick={() => navigate(token.route)}
+              >
                 <td className={sharedStyles.bodyItem}>{token.id}</td>
                 <td className={sharedStyles.bodyItem}>
-                  <span className='flex w-max items-center gap-2'>
+                  <span className="flex w-max items-center gap-2">
                     <img src={token.image} alt={`${token.name}-logo`} width={25} height={25} />
                     <span>{token.name}</span>
                   </span>
@@ -72,18 +74,19 @@ const TokenTable: React.FC<TokenTableProps> = ({ trendingTokens }) => {
                 <td
                   className={`${sharedStyles.bodyItem} font-semibold ${
                     token.priceChange24h > 0 ? "text-[#57bd0d]" : "text-[#ed5565]"
-                  }`}>
+                  }`}
+                >
                   {token.displayPriceChange24h}
                 </td>
-                <td
+                {/* <td
                   className={`${sharedStyles.bodyItem} font-semibold ${
                     token.priceChange7d > 0 ? "text-[#57bd0d]" : "text-[#ed5565]"
                   }`}>
                   {token.displayPriceChange7d}
-                </td>
+                </td> */}
                 <td className={sharedStyles.bodyItem}>{token.displayVolume24h}</td>
                 <td className={sharedStyles.bodyItem}>{token.displayMktCap}</td>
-                <td className={sharedStyles.bodyItem}>{renderSparkline(token.sparkline)}</td>
+                {/* <td className={sharedStyles.bodyItem}>{renderSparkline(token.sparkline)}</td> */}
               </tr>
             ))}
         </tbody>
@@ -94,7 +97,7 @@ const TokenTable: React.FC<TokenTableProps> = ({ trendingTokens }) => {
 
 const renderSparkline = (data: number[]): React.ReactNode => {
   return (
-    <div className='w-24 md:w-40'>
+    <div className="w-24 md:w-40">
       <Sparklines data={data}>
         <SparklinesLine
           style={{ fill: "none", strokeWidth: 3 }}
